@@ -1,7 +1,7 @@
 'use strict';
 const $ = id => document.getElementById(id);
 const local = ['127.0.0.1','localhost'].includes(location.hostname);
-const dataRoot = local ? './' : 'https://raw.githubusercontent.com/KapapiDev/osprey-view/data/';
+const dataRoot = local ? './' : 'https://raw.githubusercontent.com/KapapiDev/osprey-view/refs/heads/data/';
 const pixel = 'Departure, Galmuri, monospace';
 const ink = '#e6e6de', bg = '#101212';
 const dateFormat = new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'});
