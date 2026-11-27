@@ -41,7 +41,7 @@ function draw(){
  plotted=roundBars(raw);hit=[];layout=null;$('noBars').hidden=!!plotted.length;
  if(!plotted.length){label('quote','—');label('quoteTime','');label('barRead','선택한 날짜의 시세 없음');$('detail').hidden=true;return;}
  const end=plotted.at(-1);label('quote',price(end.c)+' USDT');label('quoteTime',(tf===1440?dayOf(end.t):stamp(raw.at(-1)[0]).slice(5,16))+' KST · 최근 봉');
- const chartFills=report.fills.filter(f=>tf===1440?(f.time>=plotted[0].t&&f.time<end.t+86400):dayOf(f.time)===day);
+ const chartFills=report.fills.filter(f=>tf>=240?(f.time>=plotted[0].t&&f.time<end.t+tf*60):dayOf(f.time)===day);
  const points=chartFills.map(f=>Number(f.price));
  const min=Math.min(...plotted.map(b=>b.l),...points),max=Math.max(...plotted.map(b=>b.h),...points);
  const pad=Math.max((max-min)*0.10,max*0.00012),lo=min-pad,hi=max+pad;
@@ -67,7 +67,7 @@ function draw(){
  }
  ctx.fillStyle='#a9ada5';const divisions=w<450?3:5;
  for(let i=0;i<divisions;i++){const b=plotted[Math.floor((plotted.length-1)*i/(divisions-1))];
-  const tx=Math.min(right-30,Math.max(left,x(b.t)));ctx.fillText((tf===1440?dayOf(b.t).slice(5):stamp(b.t).slice(11,16)),tx,h-6);}
+  const tx=Math.min(right-30,Math.max(left,x(b.t)));ctx.fillText((tf===1440?dayOf(b.t).slice(5):tf===240?dayOf(b.t).slice(5):stamp(b.t).slice(11,16)),tx,h-6);}
  const lanes=new Map();
  for(const f of [...chartFills].reverse()){
   const xx=x(f.time),yy=y(Number(f.price));if(xx<left||xx>right)continue;
@@ -83,7 +83,7 @@ function draw(){
  const focus=selected===null?null:plotted.find(b=>selected>=b.t&&selected<b.t+tf*60);
  if(focus){
   const xx=x(focus.t)+step/2;ctx.setLineDash([2,3]);ctx.strokeStyle=ink;ctx.beginPath();ctx.moveTo(xx,top);ctx.lineTo(xx,bottom);ctx.stroke();
-  label('barRead',(tf===1440?dayOf(focus.t):stamp(focus.t).slice(11,16))+' · O '+price(focus.o)+' H '+price(focus.h)+' L '+price(focus.l)+' C '+price(focus.c));
+  label('barRead',(tf===1440?dayOf(focus.t):stamp(focus.t).slice(tf===240?5:11,16))+' · O '+price(focus.o)+' H '+price(focus.h)+' L '+price(focus.l)+' C '+price(focus.c));
   const same=chartFills.filter(f=>f.time>=focus.t&&f.time<focus.t+tf*60);
   label('detail',same.map(fillText).join('\n'));$('detail').hidden=!same.length;
  }else{
@@ -95,7 +95,10 @@ async function loadDay(next,focus=null){
  const id=++requestId;day=next;selected=focus;$('chartDay').value=day;
  try{
   let rows;
-  if(tf===1440)rows=(report.dailyCandles||[]).filter(b=>dayOf(b[0])<=next).slice(-60);
+  if(tf===240){
+   const cutoff=next===report.today?Infinity:Date.parse(next+'T00:00:00+09:00')/1000+86400;
+   rows=(report.fourHourCandles||[]).filter(b=>b[0]+14400<=cutoff).slice(-42);
+  }else if(tf===1440)rows=(report.dailyCandles||[]).filter(b=>dayOf(b[0])<=next).slice(-60);
   else if(next===report.today)rows=report.candles;
   else if(archives.has(next))rows=archives.get(next);
   else{rows=await read('candles/'+next+'.json');if(rows.length)archives.set(next,rows);}
