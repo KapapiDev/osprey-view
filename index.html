@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark">
+<meta name="referrer" content="no-referrer"><title>OSPREY — BTC 실거래 터미널</title><link rel="icon" href="view-assets/osprey.png"><link rel="stylesheet" href="style.css"><script defer src="app.js"></script></head>
+<body><header><nav><a href="./" class="wordmark">▞ OSPREY</a><span class="terminal">EXECUTION TERMINAL</span><a href="#history" class="navlink">거래 기록 ↓</a></nav></header>
+<main><section class="hero"><div class="hero-inner"><div class="hero-title"><span class="block"></span><h1>누적 실현손익</h1></div>
+<div class="number"><strong id="total">—</strong> <span>USDT</span></div><p>종료된 실거래 기준 · 수수료와 펀딩비 반영</p></div>
+<img class="bird" src="view-assets/osprey.png" width="380" height="164" alt="가지 위에 앉은 흑백 도트 물수리"></section>
+<section class="stats" aria-label="거래 요약"><article><h2>오늘 실현손익</h2><strong id="today">—</strong><small> USDT</small></article><article><h2>누적 체결 수</h2><strong id="fills">—</strong><small> 건</small></article><article><h2>최근 체결</h2><strong class="small-value" id="last">—</strong><small id="last-time"></small></article></section>
+<p id="warning" role="status" hidden></p>
+<section class="chart-window"><div class="windowbar"><span>▦ &nbsp; PRICE MONITOR</span><span>GATE / USDT PERP</span></div>
+<div class="chart-head"><div><h2>BTC<span class="muted"> / USDT</span></h2><div class="quote"><b id="quote">—</b><span id="quoteTime"></span></div></div>
+<div class="controls"><label class="daypick"><span class="sr">차트 날짜</span><input type="date" id="chartDay"></label><div class="switch" aria-label="봉 주기"><button data-tf="5">5분</button><button data-tf="15" aria-pressed="true">15분</button><button data-tf="60">1시간</button></div></div></div>
+<div class="chartwrap"><canvas id="market" tabindex="0" aria-label="BTC 선물 캔들 차트. 좌우 방향키로 봉을 선택할 수 있습니다."></canvas><div id="noBars" hidden>시세를 불러올 수 없습니다.</div></div>
+<div class="chart-foot"><span><b class="buybadge">B</b> 매수 &nbsp; <b class="sellbadge">S</b> 매도</span><span id="barRead">봉을 누르면 가격이 표시됩니다.</span></div><div id="detail" hidden></div></section>
+<section id="history"><div class="section-head"><h2>거래 기록</h2><select id="month" aria-label="거래 기록 조회 월"><option value="">전체 기간</option></select></div>
+<div class="tabs"><button id="dayTab" aria-pressed="true">날짜별 손익</button><button id="fillTab" aria-pressed="false">개별 체결</button></div>
+<div id="table"></div><button id="more" hidden>더 보기 ↓</button></section><footer><span>OSPREY v1.2</span><span id="updated">기록을 읽는 중</span></footer></main></body></html>
